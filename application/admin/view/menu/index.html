@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/static/X-admin/css/font.css">
+    <link rel="stylesheet" href="/static/X-admin/css/xadmin.css">
+    <script type="text/javascript" src="/static/X-admin/lib/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/X-admin/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/X-admin/js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">演示</a>
+        <a>
+          <cite>导航元素</cite></a>
+      </span>
+      <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+      <xblock>
+        <!-- <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button> -->
+        <span class="x-right" style="line-height:40px">共有数据：{$count} 条</span>
+      </xblock>
+      <table class="layui-table layui-form">
+        <thead>
+          <tr>
+            <th width="20">
+              <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
+            </th>
+            <th width="">ID</th>
+            <th width="">栏目名</th>
+            <th width="">controller</th>
+            <th width="">method</th>
+            <th width="">排序</th>
+            <th width="">是否隐藏</th>
+            <th width="">状态</th>
+            <th width="">操作</th>
+          </tr>
+        </thead>
+        <tbody class="x-cate">
+          {foreach $list as $k}
+            {foreach $k as $v}
+            <tr cate-id='{$v.mid}' fid='{$v.pid}' >
+              <td>
+                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
+              </td>
+              <td>{$v.mid}</td>
+              <td>
+                {eq name="$v.pid" value="0"}<i class="layui-icon x-show" status='true' style="float:left">&#xe623;</i>{else /}<i class="iconfont" style="float:left">&emsp;&#xe6a7;</i>{/eq}
+                {$v.title}
+              </td>
+              <td>{$v.controller}</td>
+              <td>{$v.method}</td>
+              <td>{$v.ord}</td>
+              <td>
+                <input type="checkbox" name="ishidden" lay-id="{$v.mid}"  lay-text="是|否" lay-filter="filter" lay-skin="switch" {:$v.ishidden == 1 ? 'checked' : ''}>
+              </td>
+              <td>
+                <input type="checkbox" name="status" lay-id="{$v.mid}"  lay-text="开启|停用" lay-filter="filter" lay-skin="switch" {:$v.status == 1 ? 'checked' : ''}>
+              </td>
+              <td class="td-manage">
+                <button class="layui-btn layui-btn layui-btn-xs"  onclick="x_admin_show('编辑','{:url("menu/edit",["id"=>$v.mid,"less"=>"to"])}',470,575)" ><i class="layui-icon">&#xe642;</i>编辑</button>
+                <button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,{$v.mid})" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>
+                {eq name="$v.pid" value="0"}
+                  <button class="layui-btn layui-btn-warm layui-btn-xs"  onclick="x_admin_show('添加子栏目','{:url("menu/add",["pid"=>$v.mid, "title"=>$v.title])}',470,575)" ><i class="layui-icon">&#xe642;</i>添加子栏目</button>
+                {/eq}
+              </td>
+            </tr>
+            {/foreach}
+          {/foreach}
+        </tbody>
+        <tfoot>
+          <tr id="show">
+            <td colspan="8"></td>
+            <td><button class="layui-btn layui-btn-normal" onclick="shows()"><i class="layui-icon">&#xe61f;</i>新建一级栏目</button></td>
+          </tr>
+          <tr style="display:none" id="hide">
+            <form action="" class="layui-form">
+                <td>
+                  <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
+                </td>
+                <td><input type="text" class="layui-input x-sort" name="pid" lay-verify="require" value="0" style="display:none"></td>
+                <td><input type="text" class="layui-input x-sort" name="title" lay-verify="require" value=""></td>
+                <td><input type="text" class="layui-input x-sort" name="controller" lay-verify="controller" value=""></td>
+                <td><input type="text" class="layui-input x-sort" name="method" lay-verify="method" value=""></td>
+                <td><input type="text" class="layui-input x-sort" name="ord" lay-verify="number" value="0"></td>
+                <td>
+                  <input type="checkbox" name="ishidden" lay-text="是|否" lay-skin="switch">
+                </td>
+                <td>
+                  <input type="checkbox" name="status" lay-text="开启|停用" lay-skin="switch" checked>
+                </td>
+                <td class="td-manage">
+                  <button type="button" class="layui-btn  layui-btn-sm" id="saves">保&nbsp;存</button>
+                  <button type="button" class="layui-btn layui-btn-warm layui-btn-sm" onclick="hides()">取&nbsp;消</button>
+                </td>
+            </form>
+          </tr>
+        </tfoot>
+      </table>
+      <div style="height:200px;width:100%"></div>
+    </div>
+    <style type="text/css">
+      
+    </style>
+    <script>
+      
+      layui.use(['form'], function () {
+        var form = layui.form;
+
+        form.on('switch(filter)', function (e) {
+          $.get('/index.php/admin/menu/set_switch', {
+            num: $(e.elem).attr('lay-id')
+            , field: $(e.elem).attr('name')
+          }, function (rq) {
+            if(typeof rq == 'string') 
+              rq = JSON.parse(rq);
+            if(rq.sta) {
+              layer.msg('已更新该字段值！', {icon: 6});
+            } else {
+              layer.msg('很抱歉，更新出错！', {icon: 5});
+            }
+          })
+        }); 
+
+
+      });
+
+      
+
+      /*用户-删除*/
+      function member_del(obj,id){
+          layer.confirm('确认要删除吗？',function(index){
+            $.post("{:url('menu/del')}", {id:id,less:'to'}, function (rq) {
+              if(typeof rq == 'string') 
+                rq = JSON.parse(rq);
+              if(rq.sta==0) {
+                layer.msg(rq.mg, {icon:2});
+              }elseif(rq.sta==2) {
+                layer.confirm('该菜单有子菜单，是否继续删除及其子栏目？', function (ins) {
+                  $.get("{:url('menu/del')}",{id:id,less:'do'});
+                  $(obj).parents("tr").remove();
+                  layer.msg('已删除!', { icon: 1, time: 1000 });
+                });
+              }elseif(rq.sta==1) {
+                $(obj).parents("tr").remove();
+                layer.msg('已删除!', { icon: 1, time: 1000 });
+              }
+            });
+          });
+      }
+
+      function shows(){
+        $('#hide').show();
+        $('#show').hide();
+        return false;
+      }
+
+      function hides(){
+        $('#hide').hide();
+        $('#show').show();
+        return false;
+      }
+
+      $('#saves').click(function () {
+        $.ajax({
+          type: 'post',
+          url: "/index.php/admin/menu/save",
+          data: $('form').serialize(),
+          success: function (rq) {
+            if(typeof rq == 'string') 
+              rq = JSON.parse(rq);
+            if(rq.sta) {
+              layer.alert('已成功添加！', { icon: 6 });
+              setTimeout(function () {
+                window.location.reload();
+              },500);
+            } else {
+              layer.alert(rq.mg, { icon: 5 });
+            }
+          }
+        });
+      });
+
+      function delAll (argument) {
+
+        var data = tableCheck.getData();
+  
+        layer.confirm('确认要删除吗？'+data,function(index){
+            //捉到所有被选中的，发异步进行删除
+            layer.msg('删除成功', {icon: 1});
+            $(".layui-form-checked").not('.header').parents('tr').remove();
+        });
+      }
+    </script>
+  </body>
+
+</html>

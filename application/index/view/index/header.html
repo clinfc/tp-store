@@ -1,0 +1,20 @@
+<div class="header">
+    <div class="container">
+        <div class="left">
+            <span><i class="fa fa-home"></i><a href="">京东首页</a></span>
+            <span><i class="fa fa-map-marker"></i><a href="">北京</a></span>
+        </div>
+        <div class="right">
+            <span style="color:red">{$user.name}</span>
+            <a href="javascript:;"  target="_blank" id="{:$user ? 'logout' : 'login'}">{:$user ? '安全退出' : '你好，请登录'}</a><span>|</span>
+            {:$user ? '' : '<a href="/index.php/index/account/registers" target="_blank" style="color:rded">免费注册</a><span>|</span>'}
+            <a href="">我的订单</a><span>|</span>
+            <a href="">我的京东</a>&nbsp;&nbsp;<i class="fa fa-angle-down" style="font-size: 16px;color:gray;"></i><span>|</span>
+            <a href="">京东会员</a><span>|</span>
+            <a href="">企业采购</a><span>|</span>
+            <a href="">客户服务</a><span>|</span>
+            <a href="">网站导航</a><span>|</span>
+            <a href="">手机京东</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+	
+	<head>
+		<meta charset="UTF-8">
+		<title>欢迎页面-X-admin2.0</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="/static/X-admin/css/font.css">
+		<link rel="stylesheet" href="/static/X-admin/css/xadmin.css">
+		<script type="text/javascript" src="/static/X-admin/lib/jquery/3.2.1/jquery.min.js"></script>
+		<script type="text/javascript" src="/static/X-admin/lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="/static/X-admin/js/xadmin.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+			<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+			<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+		<style>
+			.max {
+				max-width: 190px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div class="x-nav">
+			<span class="layui-breadcrumb">
+				<a href="">首页</a>
+				<a href="">演示</a>
+				<a>
+					<cite>导航元素</cite></a>
+			</span>
+			<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">ဂ</i></a>
+		</div>
+		<div class="x-body">
+			<xblock>
+				<span class="x-right" style="line-height:40px">共有数据：{$count} 条</span>
+			</xblock>
+			<table class="layui-table layui-form">
+				<thead>
+					<tr>
+						<th width="100px">ID</th>
+						<th width="">排序</th>
+						<th width="">标签名称</th>
+						<th width="">规格名称</th>
+						<th width="">状态</th>
+						<th width="">操作</th>
+					</tr>
+				</thead>
+				<tbody >
+					{foreach $list as $cate}
+                    <tr >
+                        <form action="" class="layui-form">
+                            <td width="210px"><input type="text" class="layui-input x-sort max" name="id" readonly value="{$cate.id}"></td>
+							<td width="210px"><input type="text" class="layui-input x-sort max" name="ord" lay-verify="require" value="{$cate.ord}"></td>
+                            <td width="210px"><input type="text" class="layui-input x-sort max" name="title" lay-verify="require|number" value="{$cate.title}"></td>
+							<td>
+								{:isset($py_name[$cate.id]) ? implode('、', $py_name[$cate.id]) : '<i style="color:#FF5722">未添加</i>';}
+								<button type="button" class="layui-btn layui-btn-xs x-right {:isset($py_name[$cate.id]) ? 'layui-btn-warm' : 'layui-btn-normal';}" onclick="x_admin_show('规格{:isset($py_name[$cate.id]) ? "修改" : "添加";}','/index.php/admin/cates/add_py_name?num={$cate.id}',500,675)">
+									{:isset($py_name[$cate.id]) ? '修改规格' : '添加规格';}
+								</button>
+							</td>
+                            <td>
+                                <input type="checkbox" name="status" lay-id="{$cate.id}" lay-filter="filter" lay-text="开启|禁用" lay-skin="switch" {:$cate.status == 1 ? 'checked' : ''} >
+                            </td>
+                            <td class="td-manage">
+                                <button type="button" class="layui-btn layui-btn-disabled layui-btn-sm saves" disabled>保存修改</button>
+                            </td>
+                        </form>
+                    </tr>
+					{/foreach}
+				</tbody>
+				<tfoot>
+					<tr>
+                    <form action="" class="layui-form">
+                        <td></td>
+                        <td><input type="text" class="layui-input x-sort" name="ord" lay-verify="require|number" value="0"></td>
+						<td><input type="text" class="layui-input x-sort" name="title" lay-verify="require" value=""></td>
+						<td></td>
+                        <td>
+                            <input type="checkbox" name="status" lay-text="开启|禁用" lay-skin="switch" checked>
+                        </td>
+                        <td class="td-manage">
+                            <button type="button" class="layui-btn  layui-btn-sm saves">新增保存</button>
+                        </td>
+                    </form>
+					</tr>
+				</tfoot>
+			</table>
+			<div style="height:200px;width:100%"></div>
+		</div>
+		<style type="text/css">
+			
+		</style>
+		<script>
+
+			layui.use(['form'], function () {
+				var form = layui.form;
+                
+                form.on('switch(filter)', function (e) {
+					$.get('/index.php/admin/cates/set_switch', {
+						num: $(e.elem).attr('lay-id')
+						, field: $(e.elem).attr('name')
+					}, function (rq) {
+						if(typeof rq == 'string') 
+                            rq = JSON.parse(rq);
+						if (rq.sta) {
+							layer.msg('已更新该字段值！', { icon: 6, anim: 6 });
+						} else {
+							layer.msg('很抱歉，更新出错！', { icon: 5, anim: 6 });
+						}
+					})
+				});  
+			})
+
+			$('input').change(function (e) {
+				$(e.target).parents('td').nextAll().children('button').removeClass('layui-btn-disabled').prop('disabled', false);
+			});
+
+
+			$('.saves').click(function (e) {
+                var data = $(e.target).parents('tr').children('form').serialize();
+				$.ajax({
+					type: 'post',
+					url: "{:url('cates/save')}",
+					data: data,
+					success: function (rq) {
+						if(typeof rq == 'string') 
+                            rq = JSON.parse(rq);
+						if(rq.sta) {
+							layer.alert(rq.mg, { icon: 6 });
+						} else {
+							layer.msg(rq.mg, { icon: 5, time: 2500, anim: 6 });
+						}
+					}
+				});
+			});
+		</script>
+	</body>
+
+</html>

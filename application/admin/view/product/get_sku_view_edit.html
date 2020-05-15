@@ -1,0 +1,22 @@
+{foreach $py_info as $k => $py}
+<div class="layui-form-item perper">
+    <label for="L_username" class="layui-form-label"></label>
+    <div class="layui-input-inline">
+        <select name="city" lay-verify="">
+            <option value="0"></option>
+            {foreach $py_name as $item}
+            <option value="{$item.id}" {:$item.id == $k ? 'selected' : ''}>{$item.title}</option>
+            {/foreach}
+        </select>
+    </div>
+    {foreach $py as $val}
+    <span class="proper_span"><a href="javascript:;" class="proper_val">{$val}</a><i class="layui-icon" title="删除" onclick="del_val(this)">&#x1007;</i></span>
+    {/foreach}
+    <div class="layui-btn-group" style="margin: 5px 0 0 5px">
+        <button class="layui-btn layui-btn-sm layui-btn-normal" type="button" onclick="add_val(this)" title="添加规格属性值">
+            <i class="layui-icon">&#xe654;</i></button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger" type="button" onclick="add_val_cancel(this)" title="删除当前规格项">
+            <i class="layui-icon">&#xe640;</i></button>
+    </div>
+</div>
+{/foreach}

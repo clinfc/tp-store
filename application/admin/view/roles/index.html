@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- <link rel="stylesheet" href="/static/X-admin/css/font.css">
+    <link rel="stylesheet" href="/static/X-admin/css/xadmin.css"> -->
+    <link rel="stylesheet" href="/static/X-admin/lib/layui/css/layui.css">
+    <script type="text/javascript" src="/static/X-admin/lib/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/X-admin/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/X-admin/js/xadmin.js"></script>
+</head>
+
+<body>
+    <div class="layui-row">
+        <div class="layui-col-md10 layui-col-md-offset1">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+                <legend>角色列表</legend>
+            </fieldset>
+            <div class="layui-collapse" lay-accordion="">
+            {foreach $group as $gv}
+              <div class="layui-colla-item">
+                <h2 class="layui-colla-title">{$gv.gid}、{$gv.title}</h2>
+                <div class="layui-colla-content">
+                    <form class="layui-form" id="{$gv.gid}"> 
+                        <div class="layui-card" style="background-color: rgba(47, 64, 86, .2)">
+                            <div class="layui-card-header" style="background-color: rgba(47, 64, 86, .5);color:rgb(168, 217, 255)">角色名称</div>
+                            <div class="layui-card-header">
+                                <input type="hidden" name="gid" value="{$gv.gid}">
+                                <input type="text" name="title" value="{$gv.title}" lay-verify="title" autocomplete="off" placeholder="请输入角色名称" class="layui-input" style="margin-top:10px">
+                            </div>
+                            <div class="layui-card-header" style="background-color: rgba(47, 64, 86, .5);color:rgb(168, 217, 255)">角色权限</div>
+                            <div class="layui-card-body">
+                                {foreach $menus as $k => $item}
+                                <fieldset class="layui-elem-field">
+                                    <legend>
+                                        <input lay-filter="checkbox" type="checkbox" name="menu[{$item.mid}]" title="{$item.title}" lay-skin="primary" {:isset($gv.rights) && $gv.rights && in_array($item.mid, $gv.rights) ? 'checked' : ''}>
+                                    </legend>
+                                    <div style="padding:20px 30px">
+                                        {if(isset($item['childs']) && $item['childs'])}
+                                        {foreach $item['childs'] as $v}
+                                        <input type="checkbox" name="menu[{$v.mid}]" title="{$v.title}" lay-skin="primary" {:isset($gv.rights) && $gv.rights && in_array($v.mid, $gv.rights) ? 'checked' : ''}>
+                                        {/foreach}
+                                        {/if}
+                                    </div>
+                                </fieldset>
+                                {/foreach}
+                            </div>
+                            <button type="button" class="layui-btn" style="margin:20px" onclick="save(this)" num="{$gv.gid}">保存修改</button>
+                            <button type="button" class="layui-btn layui-btn-danger" style="margin:20px" onclick="del(this)" num="{$gv.gid}">删除角色</button>
+                        </div>
+                    </form>
+                </div>
+              </div>
+            {/foreach}
+
+              <div class="layui-colla-item">
+                <h2 class="layui-colla-title">+、新建角色</h2>
+                <div class="layui-colla-content">
+                  <form class="layui-form"> 
+                        <div class="layui-card" style="background-color: rgba(47, 64, 86, .15)">
+                            <div class="layui-card-header" style="background-color: rgba(47, 64, 86, .45);color:rgb(168, 217, 255)">角色名称</div>
+                            <div class="layui-card-header">
+                                <input type="hidden" name="gid" value="0">
+                                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入角色名称" class="layui-input" style="margin-top:10px">
+                            </div>
+                            <div class="layui-card-header" style="background-color: rgba(47, 64, 86, .45);color:rgb(168, 217, 255)">角色权限</div>
+                            <div class="layui-card-body">
+                                {foreach $menus as $k => $item}
+                                <fieldset class="layui-elem-field site-demo-button" style="margin-top: 0">
+                                    <legend>
+                                        <input lay-filter="checkbox" type="checkbox" name="menu[{$item.mid}]" title="{$item.title}" lay-skin="primary">
+                                    </legend>
+                                    <div style="padding:10px 15%">
+                                        {if(isset($item['childs']) && $item['childs'])}
+                                        {foreach $item['childs'] as $v}
+                                        <input type="checkbox" name="menu[{$v.mid}]" title="{$v.title}" lay-skin="primary">
+                                        {/foreach}
+                                        {/if}
+                                    </div>
+                                </fieldset>
+                                {/foreach}
+                            </div>
+                            <button type="button" class="layui-btn" style="margin:20px" onclick="save(this)">创建角色</button>
+                        </div>
+                    </form>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+        
+</body>
+<script>
+
+//注意：折叠面板 依赖 element 模块，否则无法进行功能性操作
+layui.use(['element','layer','form'], function(){
+  var element = layui.element
+    ,layer = layui.layer
+    ,form = layui.form
+    ,$ = layui.jquery;
+  
+  //监听折叠
+  element.on('collapse(test)', function(data){
+    layer.msg('展开状态：'+ data.show);
+  });
+
+    form.on('checkbox(checkbox)', function(data){
+        // console.log(data.elem); //得到checkbox原始DOM对象
+        // console.log(data.elem.checked); //是否被选中，true或者false
+        // console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+        // console.log(data.othis); //得到美化后的DOM对象
+        // $(data.elem).parent().next('div').children()
+        var prop = data.elem.checked;
+        var inputs = $(data.othis).parent().next('div').children('input');
+    });   
+});
+
+    
+/* 角色-保存 */
+function save(obj){
+    var form = $(obj).parents('form');
+    $.ajax({
+        type:'post',
+        url: "{:url('roles/save')}",
+        data: form.serialize(),
+        success: function (rq) {
+            if(typeof rq == 'string') 
+                rq = JSON.parse(rq);
+            if(rq.sta) {
+                layer.msg(rq.mg, {icon:6});
+            } else {
+                layer.msg(rq.mg, {icon:5});
+            }
+        }
+    });
+};
+
+/* 角色-删除 */
+function del(obj) {
+    var gid = $(obj).attr('num');
+    $.get("{:url('roles/del')}", {gid:gid}, function (rq) {
+        if(typeof rq == 'string') 
+            rq = JSON.parse(rq);
+        rq.sta ? layer.alert("删除成功！", { icon: 6 }, function () {
+            window.location.reload();
+        }) : layer.alert("未能删除！", {icon: 5});
+    })
+}
+</script>
+
+</html>

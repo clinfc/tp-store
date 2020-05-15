@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>【AppleiPhone X】Apple iPhone X (A1865) 256GB 深空灰色 移动联通电信4G手机【行情 报价 价格 评测】-京东</title>
+    <link rel="stylesheet" type="text/css" href="/static/plugins/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="/static/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/plugins/swiper/css/swiper.min.css">
+
+    <link rel="stylesheet" type="text/css" href="/static/css/detail.css">
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="/static/plugins/swiper/js/swiper.min.js"></script> -->
+    <script type="text/javascript" src="/static/plugins/layui/layui.js"></script>
+    <style>
+        .lh {list-style: none;}
+        .lh>li {float: left;margin: 5px;padding: 5px;}
+        .lh-img {height: 35px;}
+        .b2-1 {border: 2px solid red;}
+        .b2-0 {border: 2px solid rgba(255, 0, 0, 0);}
+        #swiper-ul { height:66px;border:1px solid rgba(218, 218, 218, 0.747);padding: 3px}
+    </style>
+</head>
+
+<body>
+    {include file="/index/common"}
+
+    <div class="product container">
+        <div class="slides col-sm-4">
+            <div class="swiper-container gallery-top">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <div class="swiper-zoom-container"><img src="/uploade/{$pt.img}" id="big-img" /></div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="swiper-container" id="swiper-ul">
+                <ul class="lh">
+                    {foreach $img as $v}
+                    <li class="{:$v.img == $pt.img ? 'b2-1' : 'b2-0'}"><img src="/uploade/{$v.img}" class="lh-img"></li>
+                    {/foreach}
+                </ul> 
+            </div>
+            <div class="swiper-bottom">
+                <span><i class="fa fa-heart"></i>关注</span>
+                <span><i class="fa fa-share-alt"></i>分享</span>
+                <span><i class="fa fa-sort-amount-desc"></i>对比</span>
+                <span style="float: right;"><a href="" style="text-decoration: none;color: #333;">举报</a></span>
+            </div>
+        </div>
+
+        <div class="product-info col-sm-8">
+            <input type="hidden" name="sku_id">
+            <p class="title">{$pt.desc}</p>
+            <div class="desc">下单减806，到手价8799，勾选[增值保障][原厂保2年]，意外损坏不用愁。
+                <a href="">了解更多AppleCare服务产品！</a><br>勾选[保障服务][原厂保2年]，获得AppleCare+全方位服务计划，原厂延保售后无忧。
+            </div>
+            <div class="price">
+                <div class="col-sm-10">
+                    <div>
+                        <span class="price-name">京&nbsp;东&nbsp;价</span>
+                        <span class="price-money">￥</span>
+                        <span class="price-money" lay-price="{$pt.price}" id="price_money">{$pt.price}</span>
+                        <a href="">降价通知</a>
+                    </div>
+                    <div style="margin-top: 10px;"><span class="sales">促&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;销</span>
+                        <div class="give">满送</div>
+                        <span class="give-desc">满19元即赠热销商品，赠完即止</span>
+                        <a href="" style="margin-left: 15px;color: #666;">详情>></a>
+                    </div>
+                </div>
+                <div class="col-sm-2" style="border-left: solid 1px #bbb;">
+                    <p>累计评价</p>
+                    <p><a href="">40万+</a></p>
+                </div>
+            </div>
+            <div class="increment">
+                <span class="titles">增值业务</span>
+                <p><i class="fa fa-refresh"></i>以旧换新-购新0门槛</p>
+                <p><i class="fa fa-cutlery"></i>4G套餐18元起</p>
+            </div>
+            <div class="clear dispatching">
+                <span class="titles">配&nbsp;送&nbsp;至</span>
+                <p><span>北京朝阳区三环到四环之间</span><i class="fa fa-angle-down"></i><span>有货</span><span>支持</span>
+                    <span><a href="">99元免基础运费(20kg内)</a><a href="">货到付款</a><a href="">京准达</a><a href="">211限时达</a><a
+                            href="">自提</a></span>
+                </p>
+                <p class="desc">由<span>京东</span>发货, 并提供售后服务. 11:10前下单,预计<strong>今天(05月04日)</strong>送达</p>
+            </div>
+            <div class="clear weight">
+                <span class="titles">重&nbsp;&nbsp;&nbsp;&nbsp;量</span>
+                <span style="margin-left: 10px;color: #666;">0.435kg</span>
+            </div>
+            <hr>
+
+            {foreach $pys as $py_k => $py}
+            <div class="clear selects">
+                <span class="titles" lay-id="{$py_k}">{$py_name[$py_k]}</span>
+                <div class="lists">
+                    {foreach $py as $k => $v}
+                    <p class="" lay-id="{$v}">{$py_val[$v]}</p>
+                    {/foreach}
+                </div>
+            </div>
+            {/foreach}
+            
+
+            <div class="clear selects">
+                <span class="titles">增值保障</span>
+                <div class="lists">
+                    <p lay-price="688">原厂保2年 ￥688</p>
+                    <p lay-price="399">自营碎屏保 ￥399</p>
+                    <p lay-price="279">自营延长保 ￥279</p>
+                </div>
+            </div>
+
+            <div class="clear selects">
+                <span class="titles">白条分期</span>
+                <div class="lists">
+                    <p>不分期</p>
+                    <p>￥3249.69起&times;3期</p>
+                    <p>￥1648.86起&times;6期</p>
+                    <p>￥848.44起&times;12期</p>
+                    <p>￥448.23起&times;24期</p>
+                </div>
+            </div>
+            
+            <hr class="clear">
+
+            <div class="shopping-cart">
+                <div class="number" style="float: left;">
+                    <input type="text" name="count" value="1">
+                    <input type="hidden" name="stock" >
+                    <a href="javascript:;" onclick="plus(this)">+</a>
+                    <a href="javascript:;" onclick="subtraction(this)">-</a>
+                </div>
+                <button type="button" onclick="add_carts()">加入购物车</button>
+            </div>
+            <p style="color: gray;">温馨提示支持7天无理由退货（激活后不支持）</p>
+        </div>
+    </div>
+
+    <div class="detail container">
+        <ul>
+            <li class="active">人气配件</li>
+            <li>手机贴膜</li>
+            <li>手机壳</li>
+            <li>移动电源</li>
+            <li>数据线</li>
+            <li>充电器</li>
+            <li>更多</li>
+        </ul>
+
+        <div class="parts">
+            <div class="item">
+                <img src="/static/images/part1.jpg">
+                <p>Apple iPhone X (A1865) 256GB </p>
+                <p>深空灰色 移动联通电信4G手机</p>
+            </div>
+
+            <div class="item">
+                <img src="/static/images/part1.jpg">
+                <p>Apple iPhone X (A1865) 256GB </p>
+                <p>深空灰色 移动联通电信4G手机</p>
+            </div>
+            <div class="item">
+                <img src="/static/images/part1.jpg">
+                <p>Apple iPhone X (A1865) 256GB </p>
+                <p>深空灰色 移动联通电信4G手机</p>
+            </div>
+            <div class="item">
+                <img src="/static/images/part1.jpg">
+                <p>Apple iPhone X (A1865) 256GB </p>
+                <p>深空灰色 移动联通电信4G手机</p>
+            </div>
+            <div class="item">
+                <img src="/static/images/part1.jpg">
+                <p>Apple iPhone X (A1865) 256GB </p>
+                <p>深空灰色 移动联通电信4G手机</p>
+            </div>
+            <div class="item">
+                <img src="/static/images/part1.jpg">
+                <p>Apple iPhone X (A1865) 256GB </p>
+                <p>深空灰色 移动联通电信4G手机</p>
+            </div>
+
+        </div>
+
+        <div class="hots col-sm-2" style="padding: 0px;">
+            <div class="header">
+                <p class="active">店铺热销</p>
+                <p>热门关注</p>
+            </div>
+            <div class="info">
+                <span class="num">1</span>
+                <img src="/static/images/hot11.jpg">
+                <p>Apple iPhone 8 Plus (A1864) 64GB</p>
+                <p>金色 移动联通电信4G手机</p>
+                <div class="sales">
+                    <span class="count">热销263203件</span>
+                    <span class="price">￥5799.00</span>
+                </div>
+            </div>
+
+            <div class="clear info">
+                <span class="num">2</span>
+                <img src="/static/images/hot12.jpg">
+                <p>Apple iPhone X (A1865) 64GB</p>
+                <p>银色 移动联通电信4G手机</p>
+                <div class="sales">
+                    <span class="count">热销263034件</span>
+                    <span class="price">￥8316.00</span>
+                </div>
+            </div>
+
+            <div class="clear info">
+                <span class="num">3</span>
+                <img src="/static/images/hot13.jpg">
+                <p>Apple iPhone 8 (A1863) 64GB 金色 移动联通电信4G手机</p>
+                <div class="sales">
+                    <span class="count">热销187915件</span>
+                    <span class="price">￥2099.00</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="desc-info col-sm-10">
+            <div class="nav">
+                <ul>
+                    <li class="active">商品介绍</li>
+                    <li>规格与包装</li>
+                    <li>售后保障</li>
+                    <li>商品评价(41万+)</li>
+                    <li>手机社区</li>
+                </ul>
+                <button>加入购物车</button>
+            </div>
+            <div class="info">
+
+                分辨率：2436×1125
+
+                后置摄像头：1200万像素
+
+                前置摄像头：700万像素
+
+                核 数：其他
+
+                频 率：以官网信息为准
+
+                品牌： Apple
+                商品名称：AppleiPhone X商品编号：5089239商品毛重：435.00g商品产地：中国大陆机身内存：256GB
+                <img src="/static/images/product11.jpg">
+                <img src="/static/images/product12.jpg">
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>
+<script src="/static/js/details.js"></script>
+<script src="/static/js/login.js"></script>
+
+<script type="text/javascript">
+    
+</script>

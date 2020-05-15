@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/static/X-admin/css/font.css">
+    <link rel="stylesheet" href="/static/X-admin/css/xadmin.css">
+</head>
+
+<body>
+    <div class="x-body layui-anim layui-anim-up">
+        <blockquote class="layui-elem-quote">欢迎管理员：【 {$name} 】
+        <span class="x-red">test</span>！本次登录时间: {$time}</blockquote>
+        <fieldset class="layui-elem-field">
+            <legend>系统信息</legend>
+            <div class="layui-field-box">
+                <table class="layui-table">
+                    <tbody>
+                        <tr>
+                            <th>访问IP</th>
+                            <td>{$Think.server.REMOTE_ADDR}</td>
+                        </tr>
+                        <tr>
+                            <th>服务器地址</th>
+                            <td>{$Think.server.SERVER_NAME}</td>
+                        </tr>
+                        <tr>
+                            <th>操作系统</th>
+                            <td>{$Think.server.PHP_OS_FAMILY}</td>
+                        </tr>
+                        <tr>
+                            <th>运行环境</th>
+                            <td>{$Think.server.SERVER_SOFTWARE}</td>
+                        </tr>
+                        <tr>
+                            <th>PHP版本</th>
+                            <td>{$Think.PHP_VERSION}</td>
+                        </tr>
+                        <tr>
+                            <th>PHP运行方式</th>
+                            <td>{$mod}</td>
+                        </tr>
+                        <tr>
+                            <th>MYSQL版本</th>
+                            <td>5.5.53</td>
+                        </tr>
+                        <tr>
+                            <th>ThinkPHP</th>
+                            <td>V5.1.19</td>
+                        </tr>
+                        <tr>
+                            <th>上传附件限制</th>
+                            <td>2M</td>
+                        </tr>
+                        <tr>
+                            <th>执行时间限制</th>
+                            <td>30s</td>
+                        </tr>
+                        <tr>
+                            <th>剩余空间</th>
+                            <td>86015.2M</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>开发团队</legend>
+            <div class="layui-field-box">
+                <table class="layui-table">
+                    <tbody>
+                        <tr>
+                            <th>版权所有</th>
+                            <td>xxxxx(xxxx)
+                                <a href="" class='x-a' target="_blank">访问官网</a></td>
+                        </tr>
+                        <tr>
+                            <th>团队成员</th>
+                            <td>方智聪、、潘廷柯、湛峰</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+</body>
+
+</html>

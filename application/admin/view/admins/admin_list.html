@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/static/X-admin/css/font.css">
+    <link rel="stylesheet" href="/static/X-admin/css/xadmin.css">
+    <script type="text/javascript" src="/static/X-admin/lib/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/X-admin/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/X-admin/js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="layui-anim layui-anim-up">
+    <div class="x-nav">
+        <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a href="">演示</a>
+            <a>
+                <cite>导航元素</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);"
+            title="刷新">
+            <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+    </div>
+    <div class="x-body">
+        <xblock>
+            <button class="layui-btn" onclick="x_admin_show('管理员添加','/index.php/admin/admins/adminAdd',600,500)"><i class="layui-icon"></i>添加</button>
+            <span class="x-right" style="line-height:40px;">共有数据：{$list|count} 条</span>
+            <div style="float:right;margin-right: 10%;width: 600px">
+                <form class="layui-form layui-col-md12 x-so" action="/index.php/admin/admins/adminList">
+                    <div class="layui-form-item">
+
+                        <!-- 选择搜索方式 -->
+                        <label class="layui-form-label">搜索类型</label>
+                        <div class="layui-input-inline">
+                          <select name="category" lay-verify="" lay-filter="category">
+                            <!-- <option value=""></option> -->
+                            <option value="name">用户名</option>
+                            <option value="tname">真实姓名</option>
+                            <option value="gid">角色</option>
+                            <option value="status">状态</option>
+                          </select>
+                        </div>
+
+                        <!-- 搜索类型为 “用户名” 或 “真实姓名” 时显示 -->
+                        <input id="name" type="text" name="name" lay-verify=""  value="" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+
+                        <!-- 搜索类型为 “角色时” 显示 -->
+                        <div class="layui-input-inline" style="display: none">
+                          <select id="gid" name="gid" lay-verify="">
+                            <option value=""></option>
+                            {foreach $group as $k => $v}
+                                <option value="{$k}">{$v}</option>
+                            {/foreach}
+                          </select>
+                        </div>
+
+                        <!-- 搜索类型为 “状态” 时显示 -->
+                        <div class="layui-input-inline" style="display: none;">
+                          <select id="status" name="status" lay-verify="">
+                            <option value=""></option>
+                            <option value="0">禁用</option>
+                            <option value="1">正常</option>
+                          </select>
+                        </div>
+
+                        <!-- 提交按钮 -->
+                        <button name="btn" value="sel" class="layui-btn" lay-submit lay-filter="*"><i class="layui-icon">&#xe615;</i></button>
+                      </div>
+                </form>
+            </div>
+        </xblock>
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>用户名</th>
+                    <th>真实姓名</th>
+                    <th>角色</th>
+                    <th>创建时间</th>
+                    <th>登录次数</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach $list as $k => $v}
+                <tr>
+                    <td>{$v.id}</td>
+                    <td>{$v.name}</td>
+                    <td>{$v.truename}</td>
+                    <td>{$v.group}</td>
+                    <td>{$v.create_time}</td>
+                    <td>{$v.count_login}</td>
+                    <td class="td-status">
+                        {eq name="$v.status" value="1"}
+                        <span class="layui-btn layui-btn-normal layui-btn-xs">已启用</span>
+                        {else /}
+                        <span class="layui-btn layui-btn-primary layui-btn-xs">已禁用</span>
+                        {/eq}
+                    </td>
+                    <td class="td-manage">
+                        <a onclick="setStatus(this,{$v.id})" href="javascript:;" title="{$v.setsta}">
+                            <i class="layui-icon"><?php if($v['status']==1)echo '&#xe601;';else echo '&#xe62f;'?></i>
+                        </a>&nbsp;
+                        <a title="管理员信息编辑" onclick="x_admin_show('管理员信息编辑','{:url("admins/adminEdit",["id"=>$v.id])}',600,400)" href="javascript:;">
+                            <i class="layui-icon">&#xe642;</i>
+                        </a>
+                    </td>
+                </tr>
+                {/foreach}
+            </tbody>
+        </table>
+
+    </div>
+    <script>
+        layui.use(['laydate', 'form'], function () {
+            var laydate = layui.laydate
+                ,form = layui.form;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#start' //指定元素
+            });
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#end' //指定元素
+            });
+
+            // 表单-搜索类型-监测
+            form.on('select(category)', function(e){
+                switch(e.value) {
+                    case 'name':
+                        $('#name').show();
+                        $('#gid').parent().hide();
+                        $('#status').parent().hide();
+                        $('#name').attr('placeholder', '请输入用户名');
+                        break;
+                    case 'tname':
+                        $('#name').show();
+                        $('#gid').parent().hide();
+                        $('#status').parent().hide();
+                        $('#name').attr('placeholder', '请输入用户真实姓名');
+                        break;
+                    case 'gid':
+                        $('#name').hide();
+                        $('#gid').parent().show();
+                        $('#status').parent().hide();
+                        layer.tips('请选择需要的角色类型', $('#gid').parent(), {
+                          tips: [1, '#393D49']
+                          ,time: 1500
+                        });
+                        break;
+                    case 'status':
+                        $('#name').hide();
+                        $('#gid').parent().hide();
+                        $('#status').parent().show();
+                        layer.tips('请选择需要的角色状态', $('#status').parent(), {
+                          tips: [1, '#393D49']
+                          ,time: 1500
+                        });
+                        break;
+                }
+            });
+
+
+            // 搜索按钮-监测
+            $('button[name=btn]').click(function(e){
+                var sel_val = $('select[name=category]').val();
+                switch(sel_val) {
+                    case 'name':
+                    case 'tname':
+                        var item = $('#name');
+                        var val = item.val();
+                        var mg = '此处不能为空！';
+                        break;
+                    case 'gid':
+                        var item = $('#gid').parent();
+                        var val = $('#gid').val();
+                        var mg = '请选择！';
+                        break;
+                    case 'status':
+                        var item = $('#status').parent();
+                        var val = $('#status').val();
+                        var mg = '请选择！';
+                        break;
+                }
+                // 判断搜索详情框是否为空，如果为空：提示并阻止跳转
+                if (val == '' || $.trim(val).length < 1 ) {
+                    layer.tips(mg, item, {
+                        tips: [1, '#FF5722']
+                    });
+                    item.focus();
+                    // 阻止页面跳转
+                    return false;
+                }
+            });
+        });
+
+
+        /*用户-启用-停用*/
+       function setStatus(obj, id) {
+           var $title = ($(obj).attr('title') == '启用') ? '确认要启用吗？' : '确认要禁用吗？';
+            layer.confirm($title, function (index) {
+
+                $.get("{:url('admins/setStatus')}", {id:id}, function(rq){
+                    if(typeof rq == 'string') 
+                        rq = JSON.parse(rq);
+                    if(rq.sta==0) {
+                        layer.msg(rq.mg, {icon:2});
+                    }else{
+                        if ($(obj).attr('title') == '启用') {
+
+                        //发异步把用户状态进行更改
+                        $(obj).attr('title', '禁用')
+                        $(obj).find('i').html('&#xe601;');
+
+                        $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-normal').removeClass('layui-btn-primary').html('已启用');
+                        layer.msg('已启用!', { icon: 6, time: 1000 });
+
+                    } else {
+                        $(obj).attr('title', '启用')
+                        $(obj).find('i').html('&#xe62f;');
+
+                        $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-normal').addClass('layui-btn-primary').html('已禁用');
+                        layer.msg('已禁用!', { icon: 6, time: 1000 });
+                    }
+                    }
+                });
+            });
+        }
+
+    </script>
+</body>
+
+</html>

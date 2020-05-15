@@ -1,0 +1,112 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>开始使用layui</title>
+    <link rel="stylesheet" href="/static/X-admin/lib/layui/css/layui.css">
+    <style>
+        .mar-top {
+            margin-top: 50px;
+        }
+        .btn-a {
+            position:fixed;
+            bottom:25px;
+            padding: 0 100px;
+        }
+        .btn-a>button {
+            margin: auto;
+        }
+        /* .save {
+            margin-left: 220px;position:fixed;bottom:25px
+        }
+        .add {
+            margin-left: 320px;position:fixed;bottom:25px
+        } */
+    </style>
+</head>
+
+<body>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>规格名称</legend>
+    </fieldset>
+    <div class="layui-card">
+        <!-- <div class="layui-card-header"></div> -->
+        <div class="layui-card-body">
+            <form class="layui-form" action="" id="form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">产品分类</label>
+                    <div class="layui-input-inline">
+                        <input type="text" value="{$cate.title}" readonly class="layui-input">
+                        <input type="hidden" name="cid" value="{$cate.id}">
+                    </div>
+                </div>
+                {foreach $py_name as $v}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规格名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" value="{$v.title}" name="title[]" required lay-verify="required" placeholder="请输入规格名称" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux"><span class="layui-btn layui-btn-xs layui-btn-danger"onclick="remove(this)">移除</span></div>
+                </div>
+                {/foreach}
+                <div class="layui-form-item btn-a">
+                    <button type="button" class="layui-btn save" lay-submit lay-filter="formDemo">立即保存</button>
+                    <button type="button" class="layui-btn layui-btn-normal add">新增规格</button>
+                </div>
+                <div style="height:100px;width:100%"></div>
+            </form>
+        </div>
+    </div>
+
+    
+    
+
+    <script src="/static/X-admin/lib/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/static/X-admin/lib/layui/layui.js"></script>
+    <script>
+        //一般直接写在一个js文件中
+        layui.use(['layer', 'form'], function () {
+            var layer = layui.layer
+                , form = layui.form;
+
+            // 新增规格
+            $('.add').on('click', function (e) {
+                var html = '<div class="layui-form-item"><label class="layui-form-label">规格名称</label><div class="layui-input-inline"><input type="text" name="title[]" required lay-verify="required" placeholder="请输入规格名称" autocomplete="off" class="layui-input"></div><div class="layui-form-mid layui-word-aux"><span class="layui-btn layui-btn-xs layui-btn-danger" onclick="remove(this)">移除</span></div></div>';
+                // $(e.target).parent().parent().before(html);
+                $(e.target).parent().before(html);
+                var input = $('input[type=text]');
+                input.eq(input.length-1).focus();
+            });
+
+            // 数据保存
+            form.on('submit(formDemo)', function (e) {
+                $.ajax({
+                    type: 'post'
+                    , url: '/index.php/admin/cates/py_name_save'
+                    , data: $('form').serialize()
+                    , success: function (rq) {
+                        if(typeof rq == 'string') 
+                            rq = JSON.parse(rq);
+                        if(rq.sta) {
+                            layer.alert('数据保存成功！', {icon:6}, function () {
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(index);
+                                parent.location.reload();
+                            });
+                        } else {
+                            layer.msg(rq.mg, {icon:5, time:2500, anim:6});
+                        }
+                    }
+                });
+            });
+            
+        });
+
+        function remove(e) {
+            $(e).parent().parent().remove();
+        }
+    </script>
+</body>
+
+</html>

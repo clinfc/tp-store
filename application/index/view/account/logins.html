@@ -1,0 +1,169 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>{$set.title|default='用户登录'}</title>
+    <link rel="stylesheet" href="/static/plugins/layui/css/layui.css">
+    <style>
+        .cen {
+            width:1000px;
+            height: 500px;
+            margin:auto;
+        }
+        .l-right { 
+            float: right;
+            width:490px;
+            background-color: rgb(243, 243, 243);
+            position: relative;
+            top: -425px;
+        }
+        .span-login-title {
+            width:100%;
+            line-height: 50px;
+            height:50px;
+            display: block;
+            color:rgb(156, 156, 156);
+            background-color: #FFF8F0;
+            font-size: 20px;
+            text-align: center
+        }
+        .login-pad {
+            padding: 0 40px 10px 0;
+        }
+        .welcome {
+            font-size: 40px;
+            margin: 10px;
+            display: block;
+            height: 70px;
+            line-height: 70px;
+            width: 160px;
+            float: right
+        }
+    </style>
+</head>
+
+<body>
+
+    <div style="width:100%;height: 90px;">
+        <div style="margin: 40px 0 0 200px;height: 72px;width: 400px">
+            <a href="/index.php/index/index/index">
+                <img src="/static/images/jd-logo.png" style="width:200px">
+            </a>
+            <span class="welcome">{$set.welcome|default='欢迎登录'}</span>
+        </div>
+        
+    </div>
+    <div style="width:100%;background-color: #2047A0;">
+        <div class="cen">
+            <img src="/static/images/login-bg-img.png" style="position: relative;width: 100%">
+            <div class="l-right">
+                <span class="span-login-title">{$set.title|default='用户登录'}</span>
+                <div class="login-pad">
+                    <form class="layui-form" action="/index.php/index/account/do_login" title="{$set.show|default='login'}">
+                        <div style="width:100%;height:25px"></div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="username" required lay-verify="required" placeholder="请输入标题" autocomplete="off"
+                                    class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">密码框</label>
+                            <div class="layui-input-block">
+                                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off"
+                                    class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item repass" style="{$set.repass|default='display: none'}">
+                            <label class="layui-form-label">密码框</label>
+                            <div class="layui-input-block">
+                                <input type="password" placeholder="请重新输入密码" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">验证码</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="captcha" required lay-verify="required" placeholder="请输入验证码" autocomplete="off"
+                                    class="layui-input" style="width:160px;float: left;">
+                                <img src="{:url('account/verify')}" alt="captcha" id="captcha" style="float:right" />
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <div class="layui-input-block">
+                                <a href="javascript:;" style="color:red;float: right;margin: 6px 2px 0 0;" class="to">{$set.to|default='立即注册'}</a>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="button" class="layui-btn btn-save" lay-submit lay-filter="*" style="width:100%">登录</button>
+                                <!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button> -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/X-admin/lib/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/static/X-admin/lib/layui/layui.js"></script>
+
+    <script>
+        layui.use(['layer', 'form'], function () {
+            var layer = layui.layer
+                , form = layui.form;
+
+            $('#captcha').on('click', function () {
+                $('#captcha').attr('src', $('#captcha').attr('src') + '?' + new Date().getTime());
+            });
+
+            form.on('submit(*)', function () {
+                var pass = $(':password');
+                if($('.to').text() != '立即注册' && pass.eq(0).val() != pass.eq(1).val()) {
+                    layer.msg('两次密码不一致！', {icon:5,anim:6});
+                    pass.eq(1).val('').focus();
+                } else {
+                    $.ajax({
+                        url: $('form').attr('action'),
+                        type: 'post',
+                        data: $('form').serialize(),
+                        success: function (rq) {
+                            rq.sta ? layer.msg(rq.mg, { time: 1200 }, function () {
+                                window.location.href = '/index.php/index/index/index';
+                            }) : layer.msg(rq.mg, { time: 1500, anim: 6 }, function () {
+                                $('#captcha').click();
+                                $('input[name=captcha]').val('');
+                            });
+                        }
+                    });
+                }
+            });
+
+            $('input[name=username]').focus();
+
+            $('input[name=captcha]').keyup(function (e) {
+                e.keyCode == 13 && $('.btn-save').click();
+            });
+
+            $('.to').on('click', function (e) {
+                if($(e.target).text() == '立即注册') {
+                    var title = '用户注册', welcome = '欢迎注册', to = '立即登录', action = '/index.php/index/account/do_regist';
+                    $('.repass').show();
+                } else {
+                    var title = '用户登录', welcome = '欢迎登录', to = '立即注册', action = '/index.php/index/account/do_login';
+                    $('.repass').hide();
+                }
+                $('.span-login-title').text(title);
+                $('.welcome').text(welcome);
+                $(e.target).text(to);
+                $('form').attr('action', action);
+                $('title').text(title);
+            });
+        });
+    </script>
+</body>
+
+</html>
